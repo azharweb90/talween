@@ -2,6 +2,9 @@ import { connectDB } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 
+
+export const dynamic = 'force-dynamic';
+
 // Define Project schema (same as Step 6)
 const projectSchema = new mongoose.Schema({
   title: String,
