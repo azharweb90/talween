@@ -1,106 +1,120 @@
 import { connectDB } from '@/lib/db';
+import Project from '@/lib/models/Project';
 import { NextRequest, NextResponse } from 'next/server';
-import mongoose from 'mongoose';
-
+import { Types } from 'mongoose';
 
 export const dynamic = 'force-dynamic';
 
-// Define Project schema (same as Step 6)
-const projectSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  category: String,
-  images: [String],
-  clientName: String,
-  completedDate: Date,
-  featured: Boolean,
-  createdAt: { type: Date, default: Date.now },
-});
-
-// Create or get the Project model
-const Project = mongoose.models.Project || mongoose.model('Project', projectSchema);
-
-// GET - Retrieve a single project by ID
+// GET: Retrieve a single project by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
-    // Get project by ID
-    const project = await Project.findById(params.id);
-    
-    // If project doesn't exist
+
+    const { id } = await params;
+
+    // Validate MongoDB ObjectId
+    if (!Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { error: 'Invalid project ID' },
+        { status: 400 }
+      );
+    }
+
+    const project = await Project.findById(id);
+
     if (!project) {
       return NextResponse.json(
         { error: 'Project not found' },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json(project);
+
+    return NextResponse.json(project, { status: 200 });
   } catch (error) {
+    console.error('Project GET error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch project' },
+      { error: error instanceof Error ? error.message : 'Server error' },
       { status: 500 }
     );
   }
 }
 
-// PUT - Update a project (admin only)
+// PUT: Update a project by ID (admin)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
-    const body = await request.json(); // Get updated data
-    
-    // Update the project and return updated version
-    const project = await Project.findByIdAndUpdate(params.id, body, { new: true });
-    
-    // If project doesn't exist
+
+    const { id } = await params;
+    const body = await request.json();
+
+    // Validate MongoDB ObjectId
+    if (!Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { error: 'Invalid project ID' },
+        { status: 400 }
+      );
+    }
+
+    const project = await Project.findByIdAndUpdate(id, body, { new: true });
+
     if (!project) {
       return NextResponse.json(
         { error: 'Project not found' },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json(project);
+
+    return NextResponse.json(project, { status: 200 });
   } catch (error) {
+    console.error('Project PUT error:', error);
     return NextResponse.json(
-      { error: 'Failed to update project' },
+      { error: error instanceof Error ? error.message : 'Server error' },
       { status: 500 }
     );
   }
 }
 
-// DELETE - Delete a project (admin only)
+// DELETE: Delete a project by ID (admin)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
-    // Delete the project
-    const result = await Project.findByIdAndDelete(params.id);
-    
-    // If project doesn't exist
-    if (!result) {
+
+    const { id } = await params;
+
+    // Validate MongoDB ObjectId
+    if (!Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { error: 'Invalid project ID' },
+        { status: 400 }
+      );
+    }
+
+    const project = await Project.findByIdAndDelete(id);
+
+    if (!project) {
       return NextResponse.json(
         { error: 'Project not found' },
         { status: 404 }
       );
     }
-    
-    return NextResponse.json({ message: 'Project deleted successfully' });
-  } catch (error) {
+
     return NextResponse.json(
-      { error: 'Failed to delete project' },
+      { message: 'Project deleted successfully' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Project DELETE error:', error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Server error' },
       { status: 500 }
     );
   }
