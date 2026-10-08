@@ -1,69 +1,88 @@
 import Image from "next/image";
 
+const services = [
+  {
+    title: "Signage",
+    description: "Design and fabrication of indoor and outdoor signs.",
+  },
+  {
+    title: "Installation",
+    description: "Safe, precise on-site installation by our own team.",
+  },
+  {
+    title: "Maintenance",
+    description: "Repairs, cleaning and upkeep to keep signs looking new.",
+  },
+  {
+    title: "Build",
+    description: "Custom structures, frames and fit-outs built to order.",
+  },
+];
+
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <div className="relative flex flex-1 flex-col overflow-hidden bg-[#f6f8ff] text-[#0b1640]">
+      {/* Blueprint grid background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-60"
+        style={{
+          backgroundImage:
+            "linear-gradient(#0236fb14 1px, transparent 1px), linear-gradient(90deg, #0236fb14 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          maskImage:
+            "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-[#0236fb] opacity-10 blur-3xl"
+      />
+
+      <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 py-16 text-center">
         <Image
-          className="dark:invert h-5 w-[200px]"
           src="/Images/Logo.svg"
-          alt="Talween Logo"
-          width={100}
-          height={20}
+          alt="Talween logo"
+          width={120}
+          height={117}
           priority
+          className="h-24 w-auto sm:h-28"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+
+        <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#0236fb]/20 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#0236fb]">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[#0236fb]" />
+          Coming soon
+        </span>
+
+        <h1 className="mt-6 max-w-2xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+          We&apos;re building something{" "}
+          <span className="text-[#0236fb]">you&apos;ll notice.</span>
+        </h1>
+
+        <p className="mt-5 max-w-xl text-base leading-7 text-[#0b1640]/70 sm:text-lg">
+          Our new website is under construction. Talween designs, builds,
+          installs and maintains signage that gets your business seen.
+        </p>
+
+        <ul className="mt-12 grid w-full gap-4 text-left sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((service) => (
+            <li
+              key={service.title}
+              className="rounded-2xl border border-[#0236fb]/10 bg-white/80 p-5 shadow-sm backdrop-blur"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+              <div className="mb-3 h-1 w-8 rounded-full bg-[#0236fb]" />
+              <h2 className="font-semibold">{service.title}</h2>
+              <p className="mt-1 text-sm leading-6 text-[#0b1640]/65">
+                {service.description}
+              </p>
+            </li>
+          ))}
+        </ul>
       </main>
+
+      <footer className="relative py-6 text-center text-sm text-[#0b1640]/50">
+        © {new Date().getFullYear()} Talween. All rights reserved.
+      </footer>
     </div>
   );
 }
